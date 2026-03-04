@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capitalent — Для кандидатів</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --burgundy: #7a1020;
+    --burgundy-deep: #5a0b18;
+    --burgundy-light: #9b1a2e;
+    --cream: #f5f0e8;
+    --cream-dark: #ede6d8;
+    --warm-white: #faf8f4;
+    --gold: #b8913a;
+    --gold-light: #d4ae65;
+    --ink: #1a1008;
+    --muted: #8a7060;
+    --line: #e0d8cc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* CRITICAL: html/body без overflow:hidden — інакше iframe не бачить реальну висоту */
+  html, body {
+    background: var(--warm-white);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow: visible;
+    height: auto;
+  }
+
+  .hero {
+    background: var(--burgundy-deep);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 380px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(180,60,60,0.2) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-left {
+    padding: 56px 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+    z-index: 1;
+  }
+
+  .brand-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 900;
+    color: var(--cream);
+    letter-spacing: -0.01em;
+    line-height: 1;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .brand-tagline {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+    margin-top: 8px;
+    animation: fadeDown 0.6s 0.08s ease both;
+  }
+
+  .hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 16px;
+    animation: fadeDown 0.6s 0.1s ease both;
+  }
+
+  .hero-descriptor { animation: fadeDown 0.6s 0.16s ease both; }
+
+  .hero-descriptor p {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(245,240,232,0.65);
+    line-height: 1.75;
+    max-width: 320px;
+  }
+
+  .hero-right {
+    padding: 56px 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    animation: fadeLeft 0.7s 0.12s ease both;
+  }
+
+  .hero-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 20px;
+  }
+
+  .hero-headline em { font-style: italic; color: var(--gold-light); }
+
+  .hero-sub {
+    font-size: 13.5px;
+    color: rgba(245,240,232,0.6);
+    line-height: 1.75;
+    max-width: 360px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--burgundy-deep);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+  .services-section { padding: 64px 60px 56px; }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--line);
+  }
+
+  .service-col {
+    padding: 48px 44px;
+    border-right: 1px solid var(--line);
+    position: relative;
+    animation: fadeUp 0.5s ease both;
+  }
+  .service-col:last-child { border-right: none; }
+  .service-col:nth-child(1) { animation-delay: 0.05s; }
+  .service-col:nth-child(2) { animation-delay: 0.12s; }
+
+  .col-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    font-weight: 900;
+    color: var(--cream-dark);
+    line-height: 1;
+    position: absolute;
+    top: 20px;
+    right: 28px;
+    transition: color 0.3s;
+  }
+  .service-col:hover .col-number { color: rgba(122,16,32,0.12); }
+
+  .service-badge {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--burgundy-deep);
+    border: 1px solid var(--burgundy-deep);
+    padding: 3px 9px;
+    margin-bottom: 18px;
+  }
+
+  .service-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    max-width: 260px;
+  }
+
+  .service-problem {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.75;
+    font-style: italic;
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .service-what-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .service-features { list-style: none; margin-bottom: 28px; }
+  .service-features li {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #3a2a20;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .service-features li:last-child { border-bottom: none; }
+
+  .feat-arrow {
+    color: var(--burgundy-deep);
+    font-weight: 700;
+    flex-shrink: 0;
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  .service-result {
+    background: var(--burgundy-deep);
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+
+  .service-result p {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.65;
+  }
+
+  .service-result p::before {
+    content: '"';
+    color: var(--gold-light);
+    font-size: 20px;
+    line-height: 0;
+    vertical-align: -4px;
+    margin-right: 4px;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    background: transparent;
+    color: var(--burgundy-deep);
+    border: 1.5px solid var(--burgundy-deep);
+    padding: 11px 28px;
+    font-size: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s, transform 0.2s;
+  }
+  .cta-btn:hover { background: var(--burgundy-deep); color: var(--cream); transform: translateY(-2px); }
+
+  .trust-strip {
+    background: var(--cream-dark);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .trust-item {
+    padding: 28px 40px;
+    border-right: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .trust-item:last-child { border-right: none; }
+  .trust-item:nth-child(1) { animation-delay: 0.05s; }
+  .trust-item:nth-child(2) { animation-delay: 0.10s; }
+  .trust-item:nth-child(3) { animation-delay: 0.15s; }
+
+  .trust-icon { font-size: 24px; flex-shrink: 0; }
+
+  .trust-text { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+  .trust-text strong { display: block; font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10,4,2,0.75);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .modal {
+    background: var(--warm-white);
+    max-width: 440px;
+    width: 100%;
+    position: relative;
+    animation: modalIn 0.3s ease both;
+    border-top: 3px solid var(--burgundy-deep);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .modal-header { background: var(--burgundy-deep); padding: 28px 32px 24px; }
+  .modal-logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: var(--cream); margin-bottom: 6px; }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--cream); line-height: 1.2; }
+  .modal-sub { font-size: 12px; color: rgba(245,240,232,0.55); margin-top: 6px; letter-spacing: 0.1em; }
+
+  .modal-close {
+    position: absolute; top: 16px; right: 20px;
+    background: none; border: none;
+    color: rgba(245,240,232,0.6); font-size: 24px;
+    cursor: pointer; line-height: 1; transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--cream); }
+
+  .modal-body { padding: 32px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+  .form-group input {
+    width: 100%; padding: 11px 14px;
+    border: 1px solid var(--line); background: var(--cream);
+    font-family: 'DM Sans', sans-serif; font-size: 13.5px; color: var(--ink);
+    transition: border-color 0.2s, box-shadow 0.2s; outline: none; border-radius: 0;
+  }
+  .form-group input:focus { border-color: var(--burgundy-deep); box-shadow: 0 0 0 3px rgba(122,16,32,0.08); }
+  .form-group input::placeholder { color: var(--muted); font-size: 12.5px; }
+
+  .submit-btn {
+    width: 100%; padding: 14px;
+    background: var(--burgundy-deep); color: var(--cream); border: none;
+    font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500;
+    letter-spacing: 0.35em; text-transform: uppercase; cursor: pointer;
+    transition: background 0.25s, transform 0.2s; margin-top: 8px;
+  }
+  .submit-btn:hover { background: var(--burgundy-light); transform: translateY(-1px); }
+
+  .success-msg {
+    display: none;
+    background: rgba(122,16,32,0.07);
+    border-left: 3px solid var(--burgundy-deep);
+    padding: 14px 16px; margin-bottom: 16px;
+    font-size: 13px; color: var(--burgundy-deep); font-style: italic;
+  }
+
+  .spinner-wrap { display: none; text-align: center; padding: 12px 0; }
+  .spinner {
+    width: 22px; height: 22px;
+    border: 2px solid var(--line); border-top-color: var(--burgundy-deep);
+    border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 8px;
+  }
+  .spinner-wrap p { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeLeft { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 40px 28px; }
+    .hero-right { padding: 36px 28px; }
+    .hero-headline { font-size: 30px; }
+    .services-section { padding: 40px 24px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .service-col { border-right: none !important; border-bottom: 1px solid var(--line); }
+    .service-col:last-child { border-bottom: none; }
+    .trust-strip { grid-template-columns: 1fr; }
+    .trust-item { border-right: none; border-bottom: 1px solid var(--line); }
+    .trust-item:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div>
+      <div class="brand-logo">Capitalent</div>
+      <div class="brand-tagline">Executive Search · Ukraine</div>
+    </div>
+    <div class="hero-descriptor">
+      <p>Ми знаємо ринок зсередини — і знаємо, де ваш наступний крок може змінити все.</p>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-eyebrow">Для кандидатів</div>
+    <div class="hero-headline">Ваша наступна<br>роль вже<br><em>існує</em></div>
+    <p class="hero-sub">Більшість топ-позицій ніколи не з'являються у відкритому доступі. Ми знаємо, де вони є — і допоможемо вам туди потрапити.</p>
+  </div>
+</div>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="trust-item">
+    <div class="trust-icon">🤝</div>
+    <div class="trust-text"><strong>Особисте знайомство</strong>Ми рекомендуємо лише тих, кого знаємо і кому довіряємо</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon">🔒</div>
+    <div class="trust-text"><strong>Повна конфіденційність</strong>Жодної інформації без вашої згоди</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon">🎯</div>
+    <div class="trust-text"><strong>Тільки релевантні можливості</strong>Не масова розсилка — точне попадання</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="services-section">
+  <div class="section-label">Як ми працюємо з вами</div>
+  <div class="services-grid">
+    <div class="service-col">
+      <div class="col-number">01</div>
+      <div class="service-badge">Оцінка</div>
+      <h2 class="service-title">Оцінка лідерських якостей</h2>
+      <p class="service-problem">Роки на одній посаді формують "сліпі зони". Важко побачити себе очима ринку — і ще важче зрозуміти, чим саме ви вирізняєтесь серед рівних.</p>
+      <div class="service-what-label">Що ви отримаєте</div>
+      <ul class="service-features">
+        <li><span class="feat-arrow">→</span>Комплексна оцінка управлінських навичок через реальні кейси</li>
+        <li><span class="feat-arrow">→</span>Аналіз вашого лідерського стилю та поведінки в кризових ситуаціях</li>
+        <li><span class="feat-arrow">→</span>Детальний звіт з конкретними зонами розвитку</li>
+        <li><span class="feat-arrow">→</span>Порівняння з практиками топ-керівників у вашій галузі</li>
+      </ul>
+      <div class="service-result">
+        <p>Об'єктивна картина своїх сильних сторін і чіткий план того, як позиціонувати себе на ринку.</p>
+      </div>
+      <button class="cta-btn" onclick="openModal('Оцінка лідерських якостей')">Дізнатися більше</button>
+    </div>
+
+    <div class="service-col">
+      <div class="col-number">02</div>
+      <div class="service-badge">Консультація</div>
+      <h2 class="service-title">Безкоштовна консультація</h2>
+      <p class="service-problem">Ринок топ-позицій непрозорий. Більшість вакансій закриваються до того, як потрапляють у відкритий доступ — через рекомендації та особисті зв'язки.</p>
+      <div class="service-what-label">Що ви отримаєте</div>
+      <ul class="service-features">
+        <li><span class="feat-arrow">→</span>30-хвилинна розмова з консультантом, який знає ринок зсередини</li>
+        <li><span class="feat-arrow">→</span>Чесний аналіз вашого профілю і того, як вас бачить ринок</li>
+        <li><span class="feat-arrow">→</span>Стратегія пошуку наступного кроку та рекомендації щодо CV</li>
+      </ul>
+      <div class="service-result">
+        <p>Ви точно знаєте, які можливості для вас реальні — і що зробити, щоб їх отримати.</p>
+      </div>
+      <button class="cta-btn" onclick="openModal('Безкоштовна консультація')">Записатися</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-logo">Capitalent</div>
+      <div class="modal-title" id="modal-title">Зв'яжіться з нами</div>
+      <div class="modal-sub">Заповніть форму — ми напишемо протягом 24 годин</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="success-msg" id="successMsg">Дякуємо! Ми отримали ваш запит і зв'яжемося найближчим часом.</div>
+      <form id="candidateForm">
+        <div class="form-group">
+          <label>Ім'я *</label>
+          <input type="text" id="f-name" name="name" required placeholder="Як до вас звертатись">
+        </div>
+        <div class="form-group">
+          <label>Електронна пошта *</label>
+          <input type="email" id="f-email" name="email" required placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label>Телефон *</label>
+          <input type="tel" id="f-phone" name="phone" required placeholder="+380 XX XXX XX XX">
+        </div>
+        <div class="form-group">
+          <label>Поточна позиція *</label>
+          <input type="text" id="f-position" name="company" required placeholder="Посада та компанія">
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">Надіслати запит</button>
+      </form>
+      <div class="spinner-wrap" id="spinnerWrap">
+        <div class="spinner"></div>
+        <p>Надсилання...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  (function() { emailjs.init("62-5Ynyd_ItU7t5A4"); })();
+
+  function openModal(service) {
+    document.getElementById('modal-title').textContent = service;
+    document.getElementById('overlay').style.display = 'flex';
+    // НЕ блокуємо body overflow — це ламає висоту в iframe
+  }
+
+  function closeModal() {
+    document.getElementById('overlay').style.display = 'none';
+  }
+
+  document.getElementById('overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  document.getElementById('candidateForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('submitBtn').style.display = 'none';
+    document.getElementById('spinnerWrap').style.display = 'block';
+
+    const data = {
+      name: document.getElementById('f-name').value,
+      email: document.getElementById('f-email').value,
+      phone: document.getElementById('f-phone').value,
+      company: document.getElementById('f-position').value,
+      service: document.getElementById('modal-title').textContent,
+      timestamp: new Date().toLocaleString('uk-UA'),
+      to_email: 'milena.komar@capitalent.network'
+    };
+
+    emailjs.send('service_artqjx6', 'template_3hjgj4r', data)
+      .then(() => {
+        document.getElementById('spinnerWrap').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+        this.reset();
+        setTimeout(() => {
+          document.getElementById('successMsg').style.display = 'none';
+          document.getElementById('submitBtn').style.display = 'block';
+          closeModal();
+        }, 3000);
+      })
+      .catch(() => {
+        alert('Сталася помилка. Будь ласка, спробуйте ще раз.');
+        document.getElementById('spinnerWrap').style.display = 'none';
+        document.getElementById('submitBtn').style.display = 'block';
+      });
+  });
+
+  // ── AUTORESIZE ДЛЯ GOOGLE SITES ──
+  // Google Sites не реагує на postMessage автоматично,
+  // але цей скрипт потрібен якщо сторінка хоститься на GitHub Pages / Netlify
+  // і вбудована через Embed > By URL — тоді iFrameResizer спрацює.
+  function reportHeight() {
+    var h = document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: 'setHeight', height: h }, '*');
+    window.parent.postMessage(h, '*'); // деякі реалізації чекають просте число
+  }
+
+  window.addEventListener('load', function() {
+    reportHeight();
+    setTimeout(reportHeight, 500);
+    setTimeout(reportHeight, 1200);
+  });
+
+  window.addEventListener('resize', reportHeight);
+
+  if (window.MutationObserver) {
+    new MutationObserver(function() { setTimeout(reportHeight, 100); })
+      .observe(document.body, { subtree: true, childList: true });
+  }
+</script>
+</body>
+</html>
